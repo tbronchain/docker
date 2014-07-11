@@ -13,7 +13,7 @@ RUN apt-get update
 RUN apt-get -y install aptitude
 
 # install mysql server
-RUN aptitude -y install mysql-server
+RUN aptitude -y install mysql-server mysql
 
 # install web server
 RUN aptitude -y install php5-gd libssh2-php apache2 libapache2-mod-auth-mysql php5-mysql php5 libapache2-mod-php5 php5-mcrypt
