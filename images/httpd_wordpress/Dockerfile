@@ -25,3 +25,9 @@ RUN cp /tmp/wp-config.php /var/www/html/wp-config.php
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
 ENV APACHE_LOG_DIR /var/log/apache2
+
+# Binary to start
+ENTRYPOINT ["/usr/sbin/apache2"]
+
+# Docker command (Binary's parameters)
+CMD ["-D", "FOREGROUND"]
