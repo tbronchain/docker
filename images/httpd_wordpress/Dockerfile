@@ -10,9 +10,13 @@ ADD wp-config.php /tmp/wp-config.php
 # make sure the package repository is up to date
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN apt-get update
+RUN apt-get -y install aptitude
 
-# install nginx
-RUN apt-get install -y php5-gd libssh2-php apache2 mysql-server libapache2-mod-auth-mysql php5-mysql php5 libapache2-mod-php5 php5-mcrypt
+# install mysql server
+RUN aptitude -y install mysql-server
+
+# install web server
+RUN aptitude -y install php5-gd libssh2-php apache2 libapache2-mod-auth-mysql php5-mysql php5 libapache2-mod-php5 php5-mcrypt
 
 # bootstrap mysql
 RUN mysql -uroot < /tmp/mysql_bootstrap.sh
