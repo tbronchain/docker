@@ -17,3 +17,4 @@ else
 fi
 
 docker build -t visualops/ubuntu_wordpress $IMAGE
+docker push visualops/ubuntu_wordpress
