@@ -19,7 +19,7 @@ RUN aptitude -y install mysql-server mysql-client
 RUN aptitude -y install php5-gd libssh2-php apache2 libapache2-mod-auth-mysql php5-mysql php5 libapache2-mod-php5 php5-mcrypt
 
 # bootstrap mysql
-RUN mysql -uroot < /tmp/mysql_bootstrap.sh
+RUN ((/usr/sbin/mysqld)&) && /usr/bin/mysql -uroot < /tmp/mysql_bootstrap.sh
 
 # bootstrap wordpress
 RUN unzip /tmp/wp_latest.zip -d /var/www/html/
@@ -31,7 +31,7 @@ ENV APACHE_RUN_GROUP www-data
 ENV APACHE_LOG_DIR /var/log/apache2
 
 # Binary to start
-ENTRYPOINT ["/usr/sbin/apache2"]
+ENTRYPOINT ((/usr/sbin/mysqld)&) && /usr/sbin/apache2
 
 # Docker command (Binary's parameters)
 CMD ["-D", "FOREGROUND"]
