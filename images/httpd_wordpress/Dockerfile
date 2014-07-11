@@ -22,6 +22,9 @@ ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
 ENV APACHE_LOG_DIR /var/log/apache2
 
+# expose port 80
+EXPOSE 80
+
 # Binary to start
 ENTRYPOINT ["/usr/sbin/apache2"]
 
