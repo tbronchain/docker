@@ -22,10 +22,10 @@ define('DB_NAME', 'wp-db');
 define('DB_USER', 'wp-user');
 
 /** MySQL database password */
-define('DB_PASSWORD', '123123123');
+define('DB_PASSWORD', 'MyStrongPassword!');
 
 /** MySQL hostname */
-define('DB_HOST', 'localhost');
+define('DB_HOST', '54.208.234.229');
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
