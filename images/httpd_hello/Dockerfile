@@ -10,7 +10,7 @@ RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt
 RUN apt-get update
 
 # install web server
-RUN aptitude -y install apache2
+RUN apt-get -y install apache2
 
 # bootstrap wordpress
 RUN cp /tmp/index.html /var/www/html/index.html
