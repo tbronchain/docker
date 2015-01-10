@@ -19,7 +19,8 @@ case $1 in
         docker kill ssh
         ;;
     ssh)
-        ssh -p 2222 root@`boot2docker ip`
+        ip=$(boot2docker ip)
+        ssh -p 2222 root@$ip
         ;;
     *)
         echo -e "Syntax error\nusage: $USAGE"
