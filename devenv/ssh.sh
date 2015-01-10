@@ -7,7 +7,7 @@ case $1 in
         docker build -t ssh .
         ;;
     run)
-        docker run --name=ssh --expose=22 -p 2222:22 ssh &
+        docker run --name=ssh -v ~/Sources:/sources --expose=22 -p 2222:22 ssh &
         ;;
     start)
         docker start ssh
@@ -25,4 +25,3 @@ case $1 in
         echo -e "Syntax error\nusage: $USAGE"
         ;;
 esac
-
