@@ -1,6 +1,13 @@
 #!/bin/bash
 
-USAGE="$0 build|run|start|stop|kill|ssh"
+USAGE="$0 build|run|start|stop|kill|ssh|ps|docker"
+
+STATUS=$(boot2docker status)
+if [ "$STATUS" = "poweroff" ]; then
+    boot2docker start
+fi
+$(boot2docker shellinit)
+boot2docker shellinit
 
 case $1 in
     build)
@@ -21,6 +28,13 @@ case $1 in
     ssh)
         ip=$(boot2docker ip)
         ssh -p 2222 root@$ip
+        ;;
+    ps)
+        docker ps
+        ;;
+    docker)
+        shift
+        docker $@
         ;;
     *)
         echo -e "Syntax error\nusage: $USAGE"
