@@ -4,7 +4,7 @@
 
 FROM ubuntu:14.04
 
-RUN apt-get update && apt-get install -y gcc make binutils htop g++ nasm git emacs24-nox qemu bochs
+RUN apt-get update && apt-get install -y gcc make binutils htop g++ nasm git emacs24-nox
 RUN mkdir -p /sources
 
 RUN apt-get install -y openssh-server
