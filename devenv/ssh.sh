@@ -9,12 +9,29 @@ fi
 $(boot2docker shellinit)
 boot2docker shellinit
 
+function confirm () {
+    if [ "$1" = "-f" ]; then
+        return 0
+    else
+        echo "Are you sure? [y/N]"
+        read res
+        case $res in
+            y*)
+                return 0
+                ;;
+            *)
+                return 1
+                ;;
+        esac
+    fi
+}
+
 case $1 in
     build)
         docker build -t ssh .
         ;;
     run)
-        docker run --name=ssh -v ~/Sources:/sources --expose=22 -p 2222:22 ssh &
+        docker run -d --name=ssh -v /Users/$USER/Sources:/sources --expose=22 -p 2222:22 ssh
         ;;
     start)
         docker start ssh
@@ -23,7 +40,16 @@ case $1 in
         docker stop ssh
         ;;
     kill)
-        docker kill ssh
+        confirm $2
+        if [ $? -eq 0 ]; then
+            docker kill ssh
+        fi
+        ;;
+    rm)
+        confirm $2
+        if [ $? -eq 0 ]; then
+            docker rm -f ssh
+        fi
         ;;
     ssh)
         ip=$(boot2docker ip)
