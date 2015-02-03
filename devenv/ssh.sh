@@ -31,7 +31,7 @@ case $1 in
         docker build -t ssh .
         ;;
     run)
-        docker run -d --name=ssh -v /Users/$USER/Sources:/sources --expose=22 -p 2222:22 ssh
+        docker run -d --name=ssh -v /Users/$USER/Sources:/sources --expose=22 -p 2222:22 --privileged=true ssh
         ;;
     start)
         docker start ssh
