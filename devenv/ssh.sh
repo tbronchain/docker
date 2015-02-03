@@ -1,13 +1,24 @@
 #!/bin/bash
 
-USAGE="$0 build|run|start|stop|kill|ssh|ps|docker"
+USAGE="$0 build|run|start|stop|kill|ssh|ps|docker|push"
+
+USERNAME="tbronchain"
+EMAIL_RAW='thibault! bronchain? me'
+EMAIL=$(echo $EMAIL_RAW | sed -e 's|! |@|g' -e 's|? |.|g')
+NAME=devenv
+REPO=$USERNAME/$NAME
 
 STATUS=$(boot2docker status)
-if [ "$STATUS" = "poweroff" ]; then
+if [ "$STATUS" != "started" ]; then
     boot2docker start
 fi
 $(boot2docker shellinit)
 boot2docker shellinit
+
+function ssh_fix () {
+    cat ~/.ssh/known_hosts | grep -v $1 > ~/.ssh/known_hosts.tmp
+    mv -f ~/.ssh/known_hosts.tmp ~/.ssh/known_hosts
+}
 
 function confirm () {
     if [ "$1" = "-f" ]; then
@@ -28,32 +39,37 @@ function confirm () {
 
 case $1 in
     build)
-        docker build -t ssh .
+        docker build -t $REPO .
         ;;
     run)
-        docker run -d --name=ssh -v /Users/$USER/Sources:/sources --expose=22 -p 2222:22 --privileged=true ssh
+        docker run -d --name=$NAME -v /Users/$USER/Sources:/sources --expose=22 -p 2222:22 --privileged=true $REPO
+        if [ $? -ne 0 ]; then
+           docker start $NAME
+        fi
         ;;
     start)
-        docker start ssh
+        docker start $NAME
         ;;
     stop)
-        docker stop ssh
+        docker stop $NAME
         ;;
     kill)
         confirm $2
         if [ $? -eq 0 ]; then
-            docker kill ssh
+            docker kill $NAME
         fi
         ;;
     rm)
         confirm $2
         if [ $? -eq 0 ]; then
-            docker rm -f ssh
+            docker rm -f $NAME
         fi
         ;;
     ssh)
         ip=$(boot2docker ip)
-        ssh -p 2222 root@$ip
+        ssh_fix $ip
+        echo "Default password is 'user'"
+        ssh -p 2222 user@$ip
         ;;
     ps)
         docker ps
@@ -61,6 +77,14 @@ case $1 in
     docker)
         shift
         docker $@
+        ;;
+    push)
+        docker login -e "$EMAIL" -u "$USERNAME"
+        docker push $REPO
+        ;;
+    pull)
+        docker login -e "$EMAIL" -u "$USERNAME"
+        docker pull $REPO
         ;;
     *)
         echo -e "Syntax error\nusage: $USAGE"
