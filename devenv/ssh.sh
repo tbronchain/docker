@@ -9,11 +9,15 @@ NAME=devenv
 REPO=$USERNAME/$NAME
 
 STATUS=$(boot2docker status)
-if [ "$STATUS" != "started" ]; then
+if [ "$STATUS" != "running" ]; then
     boot2docker start
+    $(boot2docker shellinit)
+else
+    $(boot2docker shellinit 2> /dev/null)
 fi
-$(boot2docker shellinit)
-boot2docker shellinit
+echo -e "Shell variable for independant actions:\n"
+boot2docker shellinit 2> /dev/null
+echo
 
 function ssh_fix () {
     cat ~/.ssh/known_hosts | grep -v $1 > ~/.ssh/known_hosts.tmp
@@ -42,7 +46,12 @@ case $1 in
         docker build -t $REPO .
         ;;
     run)
-        docker run -d --name=$NAME -v /Users/$USER/Sources:/sources --expose=22 -p 2222:22 --privileged=true $REPO
+        docker run -d --name=$NAME \
+               -v /Users/$USER/Sources:/sources \
+               -v /Users/$USER/Sources/github:/github \
+               -v /Users/$USER/.emacs:/home/user/.emacs \
+               -v /Users/$USER/.emacs.d:/home/user/.emacs.d \
+               --expose=22 -p 2222:22 --privileged=true $REPO
         if [ $? -ne 0 ]; then
            docker start $NAME
         fi
@@ -66,10 +75,15 @@ case $1 in
         fi
         ;;
     ssh)
-        ip=$(boot2docker ip)
-        ssh_fix $ip
+        ip=$(boot2docker ip 2> /dev/null)
+        export LANG=C.UTF-8
         echo "Default password is 'user'"
         ssh -p 2222 user@$ip
+        if [ $? -eq 255 ]; then
+            ssh_fix $ip
+            echo "Default password is 'user'"
+            ssh -p 2222 user@$ip
+        fi
         ;;
     ps)
         docker ps
