@@ -12,7 +12,7 @@ RUN apt-get -y install gcc make binutils htop g++ nasm git subversion mercurial 
 # Sbt
 RUN echo "deb http://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list
 RUN apt-get update
-RUN apt-get -y install sbt
+RUN apt-get -y --force-yes install sbt
 
 # Docker
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
