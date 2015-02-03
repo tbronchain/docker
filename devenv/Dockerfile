@@ -33,6 +33,7 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
+RUN groupadd -r admin
 RUN useradd -G admin -s /bin/bash -U -m user
 RUN echo user:user | chpasswd
 
