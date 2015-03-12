@@ -37,4 +37,6 @@ RUN groupadd -r admin
 RUN useradd -G admin -s /bin/bash -U -m user
 RUN echo user:user | chpasswd
 
+RUN ln -s /home /Users
+
 CMD ["/usr/sbin/sshd", "-D"]

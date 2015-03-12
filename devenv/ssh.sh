@@ -46,11 +46,12 @@ case $1 in
         docker build -t $REPO .
         ;;
     run)
-        docker run -d --name=$NAME \
+        docker run -d --name=$NAME --hostname=$NAME \
                -v /Users/$USER/Sources:/sources \
                -v /Users/$USER/Sources/github:/github \
                -v /Users/$USER/.emacs:/home/user/.emacs \
                -v /Users/$USER/.emacs.d:/home/user/.emacs.d \
+               -v /Users/$USER/.ssh:/home/user/.ssh \
                -v /Users/$USER/.bash_aliases:/home/user/.bash_aliases \
                -v /Users/$USER/git-completion.bash:/home/user/git-completion.bash \
                --expose=22 -p 2222:22 --privileged=true $REPO
