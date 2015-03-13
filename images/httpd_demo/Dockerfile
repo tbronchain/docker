@@ -16,4 +16,4 @@ RUN apt-get -y install php5-gd libssh2-php apache2 libapache2-mod-auth-mysql php
 # bootstrap wordpress
 RUN unzip /tmp/wp_latest.zip -d /tmp/
 RUN cp -rf /tmp/wordpress/* /var/www/
-RUN cp -f /tmp/wp-config.php /var/www/wordpress/wp-config.php
+RUN cp -f /tmp/wp-config.php /var/www/wp-config.php
