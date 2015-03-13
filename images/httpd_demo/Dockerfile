@@ -6,7 +6,6 @@ FROM      ubuntu:14.04
 ADD wp_latest.zip /tmp/wp_latest.zip
 
 # make sure the package repository is up to date
-RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN apt-get update
 
 # install web server
