@@ -14,6 +14,7 @@ if [ "$1" = "" ]; then
     echo " [3] httpd_wordpress"
     echo " [4] httpd_demo"
     echo " [5] sshd"
+    echo " [6] test"
     echo
     read CHOICE
 
@@ -27,6 +28,8 @@ if [ "$1" = "" ]; then
         IMAGE="httpd_demo"
     elif [ "$CHOICE" = "5" ]; then
         IMAGE="sshd"
+    elif [ "$CHOICE" = "6" ]; then
+        IMAGE="test"
     fi
 else
     IMAGE="$1"
