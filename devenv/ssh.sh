@@ -4,20 +4,21 @@ USAGE="$0 build|run|start|stop|kill|ssh|ps|docker|push"
 
 USERNAME="tbronchain"
 EMAIL_RAW='thibault! bronchain? me'
+MACHINE="default"
 EMAIL=$(echo $EMAIL_RAW | sed -e 's|! |@|g' -e 's|? |.|g')
 NAME=devenv
 REPO=$USERNAME/$NAME
 
-STATUS=$(boot2docker status)
+STATUS=$(docker-machine status $MACHINE)
 if [ "$STATUS" != "running" ]; then
-    boot2docker start
-    $(boot2docker shellinit)
+    docker-machine start $MACHINE
+    eval "$(docker-machine env $MACHINE)"
+    echo -e "Shell variable for independant actions:\n"
+    docker-machine env $MACHINE 2> /dev/null
+    echo
 else
-    $(boot2docker shellinit 2> /dev/null)
+    eval "$(docker-machine env $MACHINE 2> /dev/null)"
 fi
-echo -e "Shell variable for independant actions:\n"
-boot2docker shellinit 2> /dev/null
-echo
 
 function ssh_fix () {
     cat ~/.ssh/known_hosts | grep -v $1 > ~/.ssh/known_hosts.tmp
@@ -46,6 +47,9 @@ case $1 in
         docker build -t $REPO .
         ;;
     run)
+        #echo -e "Shell variable for independant actions:\n"
+        #docker-machine env $MACHINE 2> /dev/null
+        #echo
         docker run -d --name=$NAME --hostname=$NAME \
                -v /Users/$USER/Sources:/sources \
                -v /Users/$USER/Sources/github:/github \
@@ -60,6 +64,9 @@ case $1 in
         fi
         ;;
     start)
+        #echo -e "Shell variable for independant actions:\n"
+        #docker-machine env $MACHINE 2> /dev/null
+        #echo
         docker start $NAME
         ;;
     stop)
@@ -78,16 +85,19 @@ case $1 in
         fi
         ;;
     ssh)
-        ip=$(boot2docker ip 2> /dev/null)
-        export LANG=C.UTF-8
-        echo "Default password is 'user'"
-        ssh -p 2222 user@$ip
-        if [ $? -eq 255 ]; then
-            ssh_fix $ip
-            echo "Default password is 'user'"
-            ssh -p 2222 user@$ip
-        fi
+        docker-machine ssh $MACHINE
         ;;
+    #ssh)
+    #    ip=$(docker-machine ip default 2> /dev/null)
+    #    export LANG=C.UTF-8
+    #    echo "Default password is 'user'"
+    #    ssh -p 2222 user@$ip
+    #    if [ $? -eq 255 ]; then
+    #        ssh_fix $ip
+    #        echo "Default password is 'user'"
+    #        ssh -p 2222 user@$ip
+    #    fi
+    #    ;;
     ps)
         docker ps
         ;;
