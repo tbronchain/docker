@@ -10,7 +10,7 @@ RUN apt-get -y upgrade
 RUN apt-get -y dist-upgrade
 RUN apt-get -y install g++
 #RUN apt-get -y install gdb
-RUN apt-get -y install gcc make binutils htop nasm git subversion mercurial emacs24-nox lxc apt-transport-https golang man-db python-pip pydb scala php5 php5-cli php-elisp libc-dbg ssh-client wish npm
+RUN apt-get -y install gcc make binutils htop nasm git subversion mercurial emacs24-nox lxc apt-transport-https golang man-db python-pip pydb scala php5 php5-cli php-elisp libc-dbg ssh-client wish npm nodejs
 
 # Sbt
 RUN echo "deb http://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list
@@ -40,10 +40,9 @@ RUN groupadd -r admin
 RUN useradd -G admin,staff -s /bin/bash -U -m user
 RUN echo 'user:user' | chpasswd
 
-RUN npm install -g node
-
 RUN chown -R user /usr/local
 
 RUN ln -s /home /Users
+RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 CMD ["/usr/sbin/sshd", "-D"]
