@@ -20,6 +20,15 @@ else
     eval "$(docker-machine env $MACHINE 2> /dev/null)"
 fi
 
+# get script path
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
 function ssh_fix () {
     cat ~/.ssh/known_hosts | grep -v $1 > ~/.ssh/known_hosts.tmp
     mv -f ~/.ssh/known_hosts.tmp ~/.ssh/known_hosts
@@ -44,7 +53,7 @@ function confirm () {
 
 case $1 in
     build)
-        docker build -t $REPO .
+        docker build -t $REPO $DIR
         ;;
     run)
         #echo -e "Shell variable for independant actions:\n"
@@ -84,20 +93,20 @@ case $1 in
             docker rm -f $NAME
         fi
         ;;
-    ssh)
-        docker-machine ssh $MACHINE
-        ;;
     #ssh)
-    #    ip=$(docker-machine ip default 2> /dev/null)
-    #    export LANG=C.UTF-8
-    #    echo "Default password is 'user'"
-    #    ssh -p 2222 user@$ip
-    #    if [ $? -eq 255 ]; then
-    #        ssh_fix $ip
-    #        echo "Default password is 'user'"
-    #        ssh -p 2222 user@$ip
-    #    fi
+    #    docker-machine ssh $MACHINE
     #    ;;
+    ssh)
+        ip=$(docker-machine ip $MACHINE 2> /dev/null)
+        export LANG=C.UTF-8
+        echo "Default password is 'user'"
+        ssh -p 2222 user@$ip
+        if [ $? -eq 255 ]; then
+            ssh_fix $ip
+            echo "Default password is 'user'"
+            ssh -p 2222 user@$ip
+        fi
+        ;;
     ps)
         docker ps
         ;;
