@@ -1,7 +1,7 @@
 #!/bin/bash
 ## by Thibault Bronchain
 
-USAGE="$0 build|run|start|stop|kill|ssh|ps|docker|push"
+USAGE="$0 build|run|start|stop|kill|rm|ssh|ps|docker|push"
 
 USERNAME="tbronchain"
 EMAIL_RAW='thibault! bronchain? me'
