@@ -11,7 +11,7 @@ NAME=devenv
 REPO=$USERNAME/$NAME
 
 STATUS=$(docker-machine status $MACHINE)
-if [ "$STATUS" != "running" ]; then
+if [ "$STATUS" != "Running" ]; then
     docker-machine start $MACHINE
     eval "$(docker-machine env $MACHINE)"
     echo -e "Shell variable for independant actions:\n"
