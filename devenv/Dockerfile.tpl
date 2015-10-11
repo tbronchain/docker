@@ -5,9 +5,12 @@
 FROM ubuntu:14.04
 
 # Dev tools
-RUN apt-get update
+RUN apt-get -y update
+RUN apt-get -y upgrade
 RUN apt-get -y dist-upgrade
-RUN apt-get -y install gcc make binutils htop g++ nasm git subversion mercurial emacs24-nox gdb lxc apt-transport-https golang man-db python-pip pydb scala php5 php5-cli php-elisp libc-dbg ssh-client wish npm
+RUN apt-get -y install g++
+#RUN apt-get -y install gdb
+RUN apt-get -y install gcc make binutils htop nasm git subversion mercurial emacs24-nox lxc apt-transport-https golang man-db python-pip pydb scala php5 php5-cli php-elisp libc-dbg ssh-client wish npm
 
 # Sbt
 RUN echo "deb http://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list

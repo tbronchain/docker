@@ -53,7 +53,15 @@ function confirm () {
 
 case $1 in
     build)
+        echo "Input new password [user]:"
+        read PASSWD
+        if [ "$PASSWD" != "" ]; then
+            cat $DIR/Dockerfile.tpl | sed s/user:user/user:$PASSWD/ > $DIR/Dockerfile
+        else
+            cp $DIR/Dockerfile.tpl $DIR/Dockerfile
+        fi
         docker build -t $REPO $DIR
+        rm $DIR/Dockerfile
         ;;
     run)
         #echo -e "Shell variable for independant actions:\n"
