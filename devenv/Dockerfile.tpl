@@ -40,6 +40,8 @@ RUN groupadd -r admin
 RUN useradd -G admin,staff -s /bin/bash -U -m user
 RUN echo 'user:user' | chpasswd
 
+RUN npm install -g node
+
 RUN chown -R user /usr/local
 
 RUN ln -s /home /Users
