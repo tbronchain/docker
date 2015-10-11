@@ -1,4 +1,5 @@
 #!/bin/bash
+## by Thibault Bronchain
 
 USAGE="$0 build|run|start|stop|kill|ssh|ps|docker|push"
 
