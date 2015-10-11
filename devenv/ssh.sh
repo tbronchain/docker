@@ -56,6 +56,7 @@ case $1 in
         echo "Input new password [user]:"
         read PASSWD
         if [ "$PASSWD" != "" ]; then
+            PASSWD=$(echo $PASSWD | sed -e 's/[]\/$*.^&|[]/\\&/g')
             cat $DIR/Dockerfile.tpl | sed s/user:user/user:$PASSWD/ > $DIR/Dockerfile
         else
             cp $DIR/Dockerfile.tpl $DIR/Dockerfile
